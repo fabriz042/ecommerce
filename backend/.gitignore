@@ -1,0 +1,51 @@
+# =========================
+# Archivos de Python
+# =========================
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# =========================
+# Archivos de Django
+# =========================
+*.log
+*.sqlite3
+*.db
+.env
+*.local
+config.json
+secrets.json
+
+# Ignorar migraciones innecesarias
+*/migrations/*.py
+*/migrations/*.pyc
+
+# Base de datos y archivos sensibles
+venv/
+env/
+*.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Archivos estáticos de Django
+staticfiles/
+media/
+
+# =========================
+# Archivos de Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Configuración del sistema operativo
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Configuración de IDEs
+# =========================
+.vscode/
+.idea/
+*.swp
