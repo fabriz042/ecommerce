@@ -2,11 +2,11 @@ from rest_framework import viewsets
 
 from .models import (Product)
 from .serializer import (ProductSerializer, ProductDetailSerializer)
-from .permissions import (ReadOnlyOrIsAuthenticated)
+from .permissions import (ProductPermission)
 from utils.CustomPagination import CustomPagination
 
 class ProductsView(viewsets.ModelViewSet):
-    permission_classes = [ReadOnlyOrIsAuthenticated]
+    permission_classes = [ProductPermission]
     serializer_class = ProductSerializer
     serializer_map = {
         "list": ProductDetailSerializer,

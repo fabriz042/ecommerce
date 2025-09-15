@@ -1,5 +1,6 @@
 from pathlib import Path
-import environ
+from datetime import timedelta
+import environ 
 
 env = environ.Env()
 
@@ -54,7 +55,16 @@ CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 ROOT_URLCONF = 'config.urls'
 
 REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
 }
 
 TEMPLATES = [
