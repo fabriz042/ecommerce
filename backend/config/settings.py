@@ -11,6 +11,9 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Custom user model
+AUTH_USER_MODEL = 'user.User'
+
 DATABASES = {
     'default': {
         "ENGINE": env.str('DATABASE_ENGINE'),  
@@ -30,8 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', 
-    'app.product',
     'corsheaders',
+    'app.product',
+    'app.user',
 ]
 
 MIDDLEWARE = [
