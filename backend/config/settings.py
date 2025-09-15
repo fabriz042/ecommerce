@@ -1,8 +1,9 @@
 from pathlib import Path
 from datetime import timedelta
-import environ 
+from environs import Env
 
-env = environ.Env()
+env = Env()
+env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -64,8 +65,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': env.timedelta('ACCESS_TOKEN_LIFETIME'),
+    'REFRESH_TOKEN_LIFETIME': env.timedelta('REFRESH_TOKEN_LIFETIME'),
     'ROTATE_REFRESH_TOKENS': True,
 }
 

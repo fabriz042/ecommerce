@@ -26,12 +26,6 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_ENGINE=${DATABASE_ENGINE}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_USER=${DATABASE_USER}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_PORT=${DATABASE_PORT}
       - DEBUG=1
     depends_on:
       - db_ecommerce
