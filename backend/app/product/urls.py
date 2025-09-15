@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import buscar_productos
-from .views import slug_productos
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('busqueda/', buscar_productos),
-    path('productos/<slug:slug>/', slug_productos), 
-    
-]
+from .views import ProductsView
+
+router = DefaultRouter()
+
+router.register('api/products', ProductsView, basename='product')
+
+urlpatterns = router.urls

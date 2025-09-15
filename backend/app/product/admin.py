@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Character, Status, Brand, Category, Series
+from .models import Product, Character, Status, Brand, Category, Series, Tag, Sport
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'stock', 'price', 'weight', 'short_description', 'slug', 'status', 'brand', 'category', 'series', 'character')
@@ -37,9 +37,21 @@ class SeriesAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     search_fields = ('name',)
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_filter = ('name',)
+    search_fields = ('name',)
+
+class SportAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_filter = ('name',)
+    search_fields = ('name',)
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Series, SeriesAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Sport, SportAdmin)

@@ -180,3 +180,52 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class Tag(models.Model):
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True
+    )
+    name = models.CharField(
+        max_length=255
+    )
+    products = models.ManyToManyField(
+        Product,
+        related_name="tags"
+    )
+    
+    class Meta:
+        db_table = "tags"
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+        ordering = ["-name"]
+    
+    def __str__(self):
+        return self.name
+
+class Sport(models.Model):
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True
+    )
+    name = models.CharField(
+        max_length=255
+    )
+    products = models.ManyToManyField(
+        Product,
+        related_name="sports"
+    )
+
+    class Meta:
+        db_table = "sports"
+        verbose_name = "Sport"
+        verbose_name_plural = "Sports"
+        ordering = ["-name"]
+    
+    def __str__(self):
+        return self.name

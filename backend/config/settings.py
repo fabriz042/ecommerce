@@ -53,6 +53,10 @@ CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
 ROOT_URLCONF = 'config.urls'
 
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
