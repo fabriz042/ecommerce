@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.http import HttpResponseNotAllowed, JsonResponse
-from .models import Producto
+from .models import Product
 
 def buscar_productos(request):
     if request.method != "GET":  # Verifica que sea GET
