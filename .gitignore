@@ -20,6 +20,7 @@ secrets.json
 # Ignorar migraciones innecesarias
 */migrations/*.py
 */migrations/*.pyc
+**/migrations/**
 
 # Base de datos y archivos sensibles
 venv/
