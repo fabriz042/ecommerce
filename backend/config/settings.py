@@ -14,7 +14,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Custom user model
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'users.User'
 
 DATABASES = {
     'default': {
@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'rest_framework', 
     'corsheaders',
     'drf_spectacular',
-    'app.product',
-    'app.user',
+    'app.products',
+    'app.users',
+    'app.goods',
 ]
 
 MIDDLEWARE = [
