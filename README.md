@@ -32,12 +32,12 @@ Currently under active development, the final production-ready version will be h
     - [ ] Login, logout
     - [ ] Signup
     - [ ] Password reset
-- [ ] AI recommendation system
-- [ ] OAuth integration
+    - [ ] OAuth integration
+- [ ] AI chat system
 - [ ] Payment integration
 - [ ] Background tasks (Celery)
 - [ ] Testing (pytest)
-- [ ] Documentation (OpenAPI)
+- [x] Documentation (Swagger)
 
 ### Infrastructure / Production
 - [x] Development docker setup
