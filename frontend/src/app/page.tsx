@@ -1,4 +1,3 @@
-// app/page.tsx (o cualquier componente de página)
 "use client";
 
 import {
@@ -20,14 +19,14 @@ export default function Home() {
   return (
     <div className="mx-auto">
       {/*Carousel*/}
-      <Carousel className="w-full">
+      <Carousel className="w-full" opts={{ loop: true }}>
         <CarouselContent className="h-[800px]">
           <CarouselItem className="min-w-full relative flex items-center justify-center text-white text-2xl">
               <Image
                 src="/balls.jpg"
                 alt="Logo"
                 fill
-                style={{ objectFit: 'cover', filter: 'blur(8px)'  }} // 'cover' si quieres que llene todo el contenedor
+                style={{ objectFit: 'cover', filter: 'blur(8px)'  }}
               />
               <div className="absolute z-10">
                 <div className="z-10">
