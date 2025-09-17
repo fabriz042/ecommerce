@@ -1,6 +1,5 @@
 from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema_view
-from .schema_docs import products_list_docs
+from .schema_docs import product_docs
 
 from .models import (Product, Category, Status, Brand, Series, Character, Tag, Sport)
 from .serializer import (
@@ -16,10 +15,7 @@ from .serializer import (
 from .permissions import (ProductPermission)
 from utils.CustomPagination import CustomPagination
 
-@extend_schema_view(
-    list=products_list_docs
-)
-
+@product_docs
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [ProductPermission]
     serializer_class = ProductSerializer
