@@ -38,6 +38,7 @@ Currently under active development, the final production-ready version will be h
 - [ ] Background tasks (Celery)
 - [ ] Testing (pytest)
 - [x] Documentation (Swagger)
+- [x] MinIO self-hosted bucket-S3
 
 ### Infrastructure / Production
 - [x] Development docker setup
