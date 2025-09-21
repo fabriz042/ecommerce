@@ -1,6 +1,10 @@
 from rest_framework import viewsets
 from .schema_docs import product_docs
 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from .filters import ProductFilter
+
 from .models import (Product, Category, Status, Brand, Series, Character, Tag, Sport)
 from .serializer import (
     ProductSerializer, ProductDetailSerializer,
@@ -25,6 +29,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     }
     queryset = Product.objects.all()
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = ProductFilter
+    search_fields = ['name']
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)

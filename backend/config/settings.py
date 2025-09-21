@@ -7,7 +7,7 @@ env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 SECRET_KEY = env.str('ENV_SECRET_KEY')
 ALLOWED_HOSTS = ['*']
 
@@ -16,6 +16,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Custom user model
 AUTH_USER_MODEL = 'users.User'
 
+#---------------------Database---------------------
 DATABASES = {
     'default': {
         "ENGINE": env.str('DATABASE_ENGINE'),  
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'rest_framework', 
     'corsheaders',
     'drf_spectacular',
+    'django_filters',
+    'storages',
     'app.products',
     'app.users',
     'app.goods',
@@ -63,12 +66,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler"
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': env.timedelta('ACCESS_TOKEN_LIFETIME'),
     'REFRESH_TOKEN_LIFETIME': env.timedelta('REFRESH_TOKEN_LIFETIME'),
     'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 TEMPLATES = [
@@ -104,17 +109,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
+# -----------------Storage-------------------
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+AWS_ACCESS_KEY_ID = env.str('MINIO_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = env.str('MINIO_SECRET_KEY')
+
+AWS_STORAGE_BUCKET_NAME = env.str('MINIO_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_ENDPOINT_URL = env.str('MINIO_ENDPOINT')
+AWS_S3_FILE_OVERWRITE = False
+
+STATIC_URL = 'static/'
+
+# -----------Internationalization---------------
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

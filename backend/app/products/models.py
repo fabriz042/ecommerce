@@ -141,6 +141,11 @@ class Product(models.Model):
         blank=True,
         null=True
     )
+    included = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
     status = models.ForeignKey(
         Status, on_delete=models.PROTECT,
         related_name="products"
@@ -180,6 +185,62 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+def img_path_products(instance, filename):
+    return f"products/{instance.product.id}/{filename}"
+
+class ProductImage(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image_url = models.ImageField(
+        upload_to=img_path_products,
+    )
+    alt_text = models.CharField(
+        max_length=255,
+        blank=True,
+        null=False,
+    )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+    )
+    is_main = models.BooleanField(
+        default=False,
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.alt_text and self.product_id:
+            self.alt_text = f"Image from {self.product.name}"[:255]
+        super().save(*args, **kwargs)
+    
+    class Meta:
+        db_table = "product_images"
+        verbose_name = "Product Image"
+        verbose_name_plural = "Product Images"
+        ordering = ["order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["product", "order"],
+                name="unique_product_image_order"
+            ),
+            models.UniqueConstraint(
+                fields=["product"],
+                condition=models.Q(is_main=True),
+                name="unique_main_image_per_product"
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.product.name} - \"image n°{self.order}\""
+    
 class Tag(models.Model):
     id = models.UUIDField(
         primary_key=True, 

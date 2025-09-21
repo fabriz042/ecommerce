@@ -1,10 +1,23 @@
 from django.contrib import admin
-from .models import Product, Character, Status, Brand, Category, Series, Tag, Sport
+from .models import Product, ProductImage , Character, Status, Brand, Category, Series, Tag, Sport
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    fk_name = "product"
+    extra = 1
+
+class ProductTagInline(admin.TabularInline):
+    model = Tag.products.through
+    extra = 1
+
+class ProductSportInline(admin.TabularInline):
+    model = Sport.products.through
+    extra = 1
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'stock', 'price', 'weight', 'short_description', 'slug', 'status', 'brand', 'category', 'series', 'character')
-    list_filter = ('status', 'status__name', 'brand', 'category', 'series', 'character')
+    list_display = ('name', 'stock', 'price', 'weight', 'short_description', 'slug', 'status', 'brand', 'category', 'series', 'character', 'included')
+    list_filter = ('status', 'brand', 'category', 'series', 'character')
     search_fields = ('name',)
+    inlines = [ProductImageInline, ProductTagInline, ProductSportInline]
 
     def short_description(self, obj):
         if obj.description:

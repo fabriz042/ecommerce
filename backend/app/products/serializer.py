@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, Status, Brand, Series, Character, Tag, Sport
+from .models import Product, Category, Status, Brand, Series, Character, Tag, Sport, ProductImage
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,6 +66,11 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+class ImageProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+
 class ProductDetailSerializer(serializers.ModelSerializer):
     status = serializers.CharField(source="status.name")
     brand = serializers.CharField(source="brand.name")
@@ -74,11 +79,12 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     character = serializers.CharField(source="character.name", required=False)
     tags = serializers.StringRelatedField(many=True)
     sports = serializers.StringRelatedField(many=True) 
-    
+    images = ImageProductSerializer(many=True)
+     
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'price', 'stock', 'description', 'slug',
             'weight', 'status', 'brand', 'category', 
-            'series', 'character', 'tags', 'sports'
+            'series', 'character', 'tags', 'sports', 'images'
         ]
