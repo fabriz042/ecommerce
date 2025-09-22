@@ -13,12 +13,15 @@ const searchSuggestions = [
   "Bolsa para beisbol",
 ];
 const SearchBar = () => {
-  // Lista para el placeholder
-
-  interface Producto {
-    nombre: string;
-    precio: number;
+  interface ImageData {
+    image_url: string;
+    alt_text: string;
+  }
+  interface Results {
+    name: string;
+    price: number;
     slug: string;
+    images: ImageData[];
   }
 
   const handleBuscar = () => {
@@ -34,11 +37,11 @@ const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [productosData, setProductos] = useState<{
-    count_total: number;
-    productos: Producto[];
+    count: number;
+    results: Results[];
   }>({
-    count_total: 0,
-    productos: [],
+    count: 0,
+    results: [],
   });
   useEffect(() => {
     const handleOutSideClick = (event: MouseEvent) => {
@@ -73,7 +76,7 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        setProductos({ count_total: 0, productos: [] });
+        setProductos({ count: 0, results: [] });
         setEstadoBusqueda("Buscando...");
         const data = await getlistaBusqueda({
           name: debouncedSearch,
@@ -82,9 +85,9 @@ const SearchBar = () => {
 
         setProductos(data);
         setEstadoBusqueda(
-          data.count_total === 0
+          data.count === 0
             ? "No se encontraron productos"
-            : `Ver los ${data.count_total} productos encontrados ->`
+            : `Ver los ${data.count} productos encontrados ->`
         );
       } catch (error) {
         console.error("Error al obtener la lista de productos", error);
@@ -176,30 +179,32 @@ const SearchBar = () => {
       </div>
 
       <div
-        className="bg-white absolute w-full mt-[60px] p-3 z-20 rounded-b-[30px]"
+        className="bg-white/70 absolute w-full mt-[50px] p-3 z-20 rounded-b-[30px]"
         style={{ display: isOpen ? "block" : "none" }}
       >
-        {productosData.productos.map(({ nombre, precio, slug }) => (
+        {productosData.results.map(({ name, price, slug, images }) => (
           <Link href={`/productos/categoria/${slug}`} key={slug}>
             <div
-              className="flex gap-4 rounded-lg p-3 m-2 border-2 border-black-500 cursor-pointer bg-slate-200 hover:bg-slate-300 shadow-sm"
+              className="flex space-x-1 rounded-lg p-3 m-1 border-2 border-black-500 cursor-pointer bg-slate-200 hover:bg-slate-300 shadow-sm"
               onClick={handleBuscar}
             >
-              <div className="border-red-500 border-2 col-start-3 h-[100] w-[100] items center flex bg-white">
+              <div className="border-red-500 border-2 col-start-3 h-[70px] w-[70px] items-center flex bg-white">
+              {images && images.length > 0 && (
                 <Image
-                  src={`/productos/${slug}/1.webp`}
-                  alt="Ejemplo de imagen optimizada"
-                  width={100}
-                  height={100}
+                  src={images[0].image_url}
+                  alt={images[0].alt_text}
+                  width={70}
+                  height={70}
                   className="object-contain max-w-full max-h-full"
                 />
+              )}
               </div>
-              <div className="border-black border-2 col-start-4 text-2xl">
-                {nombre}
+              <div className="border-black border-2 col-start-4 text-lg items-center flex">
+                {name}
               </div>
-              <div className="border-green-500 border-2 col-start-6 text-2xl ml-auto">
+              <div className="border-green-500 border-2 col-start-6 text-lg ml-auto items-center flex">
                 {moneda}
-                {precio.toLocaleString("en-US")}
+                {price.toLocaleString("en-US")}
               </div>
             </div>
           </Link>
