@@ -11,7 +11,7 @@ const api = axios.create({
   },
 });
 
-// Log de la URL base
+// Log from url
 console.log("Base URL:", process.env.NEXT_PUBLIC_API_URL);
 
 export default api;

@@ -20,12 +20,12 @@ const SearchBar = () => {
     setIsOpen(false);
   };
 
-  //logic to open and close the search box
+  // Logic to open and close the search box
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [searchStatus, setSearchStatus] = useState("");
 
-  //logic to manage the search input and results
+  // Logic to manage the search input and results
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [productsData, setProductsData] = useState<PaginatedProducts>({
@@ -49,23 +49,23 @@ const SearchBar = () => {
     };
   }, [ref, search, isOpen]);
 
-  //USEFFECT para el retraso de la busqueda, evitar sobresaturar el api
+  // USEFFECT to delay the search and avoid overloading the API
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearch(search); // Actualiza el valor después del delay
+      setDebouncedSearch(search); // Updates the value after the delay
     }, 300);
 
     return () => {
-      clearTimeout(handler); // Limpia el timeout si el usuario sigue escribiendo
+      clearTimeout(handler); // Clears the timeout if the user keeps typing
     };
   }, [search]);
 
-  //USEFFECT para la llamada al api
+  // USEFFECT to call the API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setProductsData({ count: 0, num_pages: 0, results: [] });
-        setSearchStatus("Buscando...");
+        setSearchStatus("Searching...");
         const data = await getlistaBusqueda({
           search: debouncedSearch,
           limit: 4,
@@ -75,10 +75,10 @@ const SearchBar = () => {
         setSearchStatus(
           data.count === 0
             ? "No se encontraron productos"
-            : `Ver los ${data.count} productos encontrados ->`
+            : `View the ${data.count} products found ->`
         );
       } catch (error) {
-        console.error("Error al obtener la lista de productos", error);
+        console.error("Error fetching the product list", error);
       }
     };
     if (debouncedSearch.trim() !== "") {
@@ -89,7 +89,7 @@ const SearchBar = () => {
     }
   }, [debouncedSearch]);
 
-  //Efecto tipado para el placeholder-----------------------------------------------------------------
+  // Typing effect for the placeholder-----------------------------------------------------------------
   const [placeholderText, setPlaceholderText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [currentSuggestionIndex, setCurrentSuggestionIndex] = useState(0);
@@ -104,7 +104,7 @@ const SearchBar = () => {
           setPlaceholderText(
             currentSuggestion.substring(0, placeholderText.length + 1)
           );
-        }, 70); //Time of typing
+        }, 70); // Typing speed
         return () => clearTimeout(timer);
       } else {
         const timer = setTimeout(() => {
@@ -118,7 +118,7 @@ const SearchBar = () => {
           setPlaceholderText(
             currentSuggestion.substring(0, placeholderText.length - 1)
           );
-        }, 25); //Time of deleting
+        }, 25); // Deleting speed
         return () => clearTimeout(timer);
       } else {
         const timer = setTimeout(() => {
@@ -126,7 +126,7 @@ const SearchBar = () => {
             (prevIndex) => (prevIndex + 1) % searchSuggestions.length
           );
           setIsTyping(true);
-        }, 300); //Time before start typing again
+        }, 300); // Time before starting to type again
         return () => clearTimeout(timer);
       }
     }
