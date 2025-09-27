@@ -8,7 +8,7 @@ export interface Product {
   name: string;
   price: number;
   slug: string;
-  status: string;
+  state: string;
   images: ImageData[];
 }
 
@@ -19,8 +19,8 @@ export interface PaginatedProducts {
 }
 
 //Interfaces for detailed product information
-import { Tag } from "@/types/tags";
-import { Sport} from "@/types/sports";
+import { Tag } from "@/types/tag";
+import { Sport } from "@/types/sport";
 
 export interface ProductDetail {
   id: string;

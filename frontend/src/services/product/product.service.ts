@@ -3,23 +3,28 @@ import api from "@/services/api.service";
 interface Busqueda {
   search: string;
   limit?: number;
-  page?: number | 1;
-  estado?: number;
-  marca?: string;
+  page?: number;
+  state?: string;
+  brand?: string;
+  category?: string;
 }
 
 export const getSearchResults = async ({
   search,
   limit,
-  estado,
+  state,
   page,
+  brand,
+  category,
 }: Busqueda) => {
   try {
     const params = new URLSearchParams();
     params.append("search", search);
     if (limit) params.append("limit", limit.toString());
-    if (estado) params.append("estado", estado.toString());
+    if (state) params.append("state", state.toString());
+    if (brand) params.append("brand", brand.toString());
     if (page) params.append("page", page.toString());
+    if (category) params.append("category", category.toString());
 
     const response = await api.get(`products/?${params.toString()}`);
     return response.data;
