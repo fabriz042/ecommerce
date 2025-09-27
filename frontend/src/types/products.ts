@@ -15,7 +15,7 @@ export interface Product {
 export interface PaginatedProducts {
   count: number;
   num_pages: number;
-  products: Product[];
+  results: Product[];
 }
 
 //Interfaces for detailed product information

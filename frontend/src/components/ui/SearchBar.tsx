@@ -2,9 +2,12 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
+import Image from "next/image";
+
 import { AiOutlineSearch } from "react-icons/ai";
 import { getlistaBusqueda } from "@/services/products/product.service";
-import Image from "next/image";
+
+import { PaginatedProducts } from "@/types/products";
 
 const moneda = "s/. ";
 const searchSuggestions = [
@@ -13,45 +16,30 @@ const searchSuggestions = [
   "Bolsa para beisbol",
 ];
 const SearchBar = () => {
-  interface ImageData {
-    image_url: string;
-    alt_text: string;
-  }
-  interface Results {
-    name: string;
-    price: number;
-    slug: string;
-    images: ImageData[];
-  }
-
-  const handleBuscar = () => {
+  const handleSearch = () => {
     setIsOpen(false);
   };
 
-  //USEEFFECT para cerrar el cuadro de busqueda al hacer click fuera de el
+  //logic to open and close the search box
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const [estadoBusqueda, setEstadoBusqueda] = useState("");
+  const [searchStatus, setSearchStatus] = useState("");
 
-  //CONST PARA LA BUSQUEDA Logica
+  //logic to manage the search input and results
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [productosData, setProductos] = useState<{
-    count: number;
-    results: Results[];
-  }>({
+  const [productsData, setProductsData] = useState<PaginatedProducts>({
     count: 0,
+    num_pages: 0,
     results: [],
   });
   useEffect(() => {
     const handleOutSideClick = (event: MouseEvent) => {
       if (ref.current?.contains(event.target as Node)) {
         if (search.trim() !== "") {
-          // Si hay texto en el input, abre el cuadro de búsqueda
           setIsOpen(true);
         }
       } else {
-        // Si el clic ocurre fuera del componente, cierra el cuadro de búsqueda
         setIsOpen(false);
       }
     };
@@ -65,7 +53,7 @@ const SearchBar = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search); // Actualiza el valor después del delay
-    }, 300); // Retraso de 500ms
+    }, 300);
 
     return () => {
       clearTimeout(handler); // Limpia el timeout si el usuario sigue escribiendo
@@ -74,17 +62,17 @@ const SearchBar = () => {
 
   //USEFFECT para la llamada al api
   useEffect(() => {
-    const fetchProductos = async () => {
+    const fetchProducts = async () => {
       try {
-        setProductos({ count: 0, results: [] });
-        setEstadoBusqueda("Buscando...");
+        setProductsData({ count: 0, num_pages: 0, results: [] });
+        setSearchStatus("Buscando...");
         const data = await getlistaBusqueda({
-          name: debouncedSearch,
+          search: debouncedSearch,
           limit: 4,
         });
 
-        setProductos(data);
-        setEstadoBusqueda(
+        setProductsData(data);
+        setSearchStatus(
           data.count === 0
             ? "No se encontraron productos"
             : `Ver los ${data.count} productos encontrados ->`
@@ -94,7 +82,7 @@ const SearchBar = () => {
       }
     };
     if (debouncedSearch.trim() !== "") {
-      fetchProductos();
+      fetchProducts();
       setIsOpen(true);
     } else {
       setIsOpen(false);
@@ -116,7 +104,7 @@ const SearchBar = () => {
           setPlaceholderText(
             currentSuggestion.substring(0, placeholderText.length + 1)
           );
-        }, 70); //Tiempo de escritura
+        }, 70); //Time of typing
         return () => clearTimeout(timer);
       } else {
         const timer = setTimeout(() => {
@@ -130,7 +118,7 @@ const SearchBar = () => {
           setPlaceholderText(
             currentSuggestion.substring(0, placeholderText.length - 1)
           );
-        }, 25); //Tiempo de borrado
+        }, 25); //Time of deleting
         return () => clearTimeout(timer);
       } else {
         const timer = setTimeout(() => {
@@ -138,7 +126,7 @@ const SearchBar = () => {
             (prevIndex) => (prevIndex + 1) % searchSuggestions.length
           );
           setIsTyping(true);
-        }, 300); //Tiempo de pensando
+        }, 300); //Time before start typing again
         return () => clearTimeout(timer);
       }
     }
@@ -155,7 +143,7 @@ const SearchBar = () => {
           placeholder={placeholderText}
           onFocus={() => {
             setInputFocused(true);
-            setPlaceholderText(""); // Clear the placeholder text
+            setPlaceholderText("");
           }}
           onBlur={() => {
             if (!search) {
@@ -171,7 +159,7 @@ const SearchBar = () => {
         <div className="cursor-pointer" onClick={() => setSearch("")}>
           <Link
             href={search ? `/busqueda/${search}` : "#"}
-            onClick={handleBuscar}
+            onClick={handleSearch}
           >
             <AiOutlineSearch className="text-black h-[40px] w-[40px] ml-[-50px] mt-1" />
           </Link>
@@ -182,22 +170,22 @@ const SearchBar = () => {
         className="bg-white/70 absolute w-full mt-[50px] p-3 z-20 rounded-b-[30px]"
         style={{ display: isOpen ? "block" : "none" }}
       >
-        {productosData.results.map(({ name, price, slug, images }) => (
+        {productsData.results.map(({ name, price, slug, images }) => (
           <Link href={`/productos/categoria/${slug}`} key={slug}>
             <div
               className="flex space-x-1 rounded-lg p-3 m-1 border-2 border-black-500 cursor-pointer bg-slate-200 hover:bg-slate-300 shadow-sm"
-              onClick={handleBuscar}
+              onClick={handleSearch}
             >
               <div className="border-red-500 border-2 col-start-3 h-[70px] w-[70px] items-center flex bg-white">
-              {images && images.length > 0 && (
-                <Image
-                  src={images[0].image_url}
-                  alt={images[0].alt_text}
-                  width={70}
-                  height={70}
-                  className="object-contain max-w-full max-h-full"
-                />
-              )}
+                {images && images.length > 0 && (
+                  <Image
+                    src={images[0].image_url}
+                    alt={images[0].alt_text}
+                    width={70}
+                    height={70}
+                    className="object-contain max-w-full max-h-full"
+                  />
+                )}
               </div>
               <div className="border-black border-2 col-start-4 text-lg items-center flex">
                 {name}
@@ -210,14 +198,11 @@ const SearchBar = () => {
           </Link>
         ))}
 
-        {/* Enlace para ver todos los resultados */}
-        <Link href={`/busqueda/${search}`}>
-          <div
-            className="text-right cursor-pointer"
-            onClick={handleBuscar} // Llama a handleBuscar antes de navegar
-          >
+        {/* Url to view all results */}
+        <Link href={`productos/busqueda/${search}`}>
+          <div className="text-right cursor-pointer" onClick={handleSearch}>
             <div className="p-2">
-              <p>{estadoBusqueda}</p>
+              <p>{searchStatus}</p>
             </div>
           </div>
         </Link>
