@@ -7,7 +7,7 @@ from .filters import ProductFilter
 
 from .models import (Product, Category, Status, Brand, Series, Character, Tag, Sport)
 from .serializer import (
-    ProductSerializer, ProductDetailSerializer,
+    ProductListSerializer, ProductSerializer, ProductDetailSerializer,
     CategorySerializer, CategoryDetailSerializer,
     StatusSerializer, StatusDetailSerializer,
     BrandSerializer, BrandDetailSerializer,
@@ -24,14 +24,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [ProductPermission]
     serializer_class = ProductSerializer
     serializer_map = {
-        "list": ProductDetailSerializer,
+        "list": ProductListSerializer,
         "retrieve": ProductDetailSerializer,
     }
     queryset = Product.objects.all()
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ProductFilter
-    search_fields = ['name']
+    search_fields = ['name', 'category__name']
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)

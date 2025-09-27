@@ -61,16 +61,25 @@ class SportDetailSerializer(serializers.ModelSerializer):
         model = Sport
         fields = '__all__'
 
+class ImageProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['image_url', 'alt_text', 'is_main']
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
-class ImageProductSerializer(serializers.ModelSerializer):
+# Serializer for searching and listing products quickly
+class ProductListSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(source="status.name")
+    images = ImageProductSerializer(many=True, read_only=True)
     class Meta:
-        model = ProductImage
-        fields = '__all__'
+        model = Product
+        fields = ['slug', 'name', 'price', 'status', 'images']
 
+# Detailed serializer for a single product
 class ProductDetailSerializer(serializers.ModelSerializer):
     status = serializers.CharField(source="status.name")
     brand = serializers.CharField(source="brand.name")
@@ -84,7 +93,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'price', 'stock', 'description', 'slug',
+            'name', 'price', 'stock', 'description', 'slug',
             'weight', 'status', 'brand', 'category', 
             'series', 'character', 'tags', 'sports', 'images'
         ]
