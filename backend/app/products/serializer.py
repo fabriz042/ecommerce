@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import Product, Category, Status, Brand, Series, Character, Tag, Sport, ProductImage
+from .models import Product, Category, State, Brand, Series, Character, Tag, Sport, ProductImage
 
-class StatusSerializer(serializers.ModelSerializer):
+class StateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Status
+        model = State
         fields = '__all__'
-class StatusDetailSerializer(serializers.ModelSerializer):
+class StateDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Status
+        model = State
         fields = '__all__'
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,15 +73,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
 # Serializer for searching and listing products quickly
 class ProductListSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(source="status.name")
+    state = serializers.CharField(source="state.name")
     images = ImageProductSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ['slug', 'name', 'price', 'status', 'images']
+        fields = ['slug', 'name', 'price', 'state', 'images']
 
 # Detailed serializer for a single product
 class ProductDetailSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(source="status.name")
+    state = serializers.CharField(source="state.name")
     brand = serializers.CharField(source="brand.name")
     category = serializers.CharField(source="category.name")
     series = serializers.CharField(source="series.name", required=False)
@@ -94,6 +94,6 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'name', 'price', 'stock', 'description', 'slug',
-            'weight', 'status', 'brand', 'category', 
+            'weight', 'state', 'brand', 'category',
             'series', 'character', 'tags', 'sports', 'images'
         ]

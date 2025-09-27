@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ProductImage , Character, Status, Brand, Category, Series, Tag, Sport
+from .models import Product, ProductImage , Character, State, Brand, Category, Series, Tag, Sport
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -14,8 +14,8 @@ class ProductSportInline(admin.TabularInline):
     model = Sport.products.through
     extra = 1
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'stock', 'price', 'weight', 'short_description', 'slug', 'status', 'brand', 'category', 'series', 'character', 'included')
-    list_filter = ('status', 'brand', 'category', 'series', 'character')
+    list_display = ('name', 'stock', 'price', 'weight', 'short_description', 'slug', 'state', 'brand', 'category', 'series', 'character', 'included')
+    list_filter = ('state', 'brand', 'category', 'series', 'character')
     search_fields = ('name',)
     inlines = [ProductImageInline, ProductTagInline, ProductSportInline]
 
@@ -25,7 +25,7 @@ class ProductAdmin(admin.ModelAdmin):
         return "--"
     short_description.short_description = "Description"
 
-class StatusAdmin(admin.ModelAdmin):
+class StateAdmin(admin.ModelAdmin):
     list_display = ('name',)
     list_filter = ('name',)
     search_fields = ('name',)
@@ -61,7 +61,7 @@ class SportAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Status, StatusAdmin)
+admin.site.register(State, StateAdmin)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Category, CategoryAdmin)

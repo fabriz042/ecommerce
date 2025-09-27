@@ -5,11 +5,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from .filters import ProductFilter
 
-from .models import (Product, Category, Status, Brand, Series, Character, Tag, Sport)
+from .models import (Product, Category, State, Brand, Series, Character, Tag, Sport)
 from .serializer import (
     ProductListSerializer, ProductSerializer, ProductDetailSerializer,
     CategorySerializer, CategoryDetailSerializer,
-    StatusSerializer, StatusDetailSerializer,
+    StateSerializer, StateDetailSerializer,
     BrandSerializer, BrandDetailSerializer,
     SeriesSerializer, SeriesDetailSerializer,
     CharacterSerializer, CharacterDetailSerializer,
@@ -48,14 +48,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)
 
-class StatusViewSet(viewsets.ModelViewSet):
+class StateViewSet(viewsets.ModelViewSet):
     permission_classes = [ProductPermission]
-    serializer_class = StatusSerializer
+    serializer_class = StateSerializer
     serializer_map = {
-        "list": StatusDetailSerializer,
-        "retrieve": StatusDetailSerializer,
+        "list": StateDetailSerializer,
+        "retrieve": StateDetailSerializer,
     }
-    queryset = Status.objects.all()
+    queryset = State.objects.all()
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)

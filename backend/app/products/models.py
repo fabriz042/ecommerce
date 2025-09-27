@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.utils.text import slugify
 
-class Status(models.Model):
+class State(models.Model):
     id = models.UUIDField(
         primary_key=True, 
         default=uuid.uuid4,
@@ -15,9 +15,9 @@ class Status(models.Model):
     )
     
     class Meta:
-        db_table = "status"
-        verbose_name = "Status"
-        verbose_name_plural = "Status"
+        db_table = "state"
+        verbose_name = "State"
+        verbose_name_plural = "States"
         ordering = ["-name"]
 
     def __str__(self):
@@ -146,8 +146,8 @@ class Product(models.Model):
         blank=True,
         null=True
     )
-    status = models.ForeignKey(
-        Status, on_delete=models.PROTECT,
+    state = models.ForeignKey(
+        State, on_delete=models.PROTECT,
         related_name="products"
     )
     brand = models.ForeignKey(
