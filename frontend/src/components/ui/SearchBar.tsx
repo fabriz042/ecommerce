@@ -5,7 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { AiOutlineSearch } from "react-icons/ai";
-import { getlistaBusqueda } from "@/services/products/product.service";
+import { getSearchResults } from "@/services/products/product.service";
 
 import { PaginatedProducts } from "@/types/products";
 
@@ -66,7 +66,7 @@ const SearchBar = () => {
       try {
         setProductsData({ count: 0, num_pages: 0, results: [] });
         setSearchStatus("Searching...");
-        const data = await getlistaBusqueda({
+        const data = await getSearchResults({
           search: debouncedSearch,
           limit: 4,
         });
